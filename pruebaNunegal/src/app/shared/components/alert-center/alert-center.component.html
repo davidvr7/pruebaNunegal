@@ -1,0 +1,22 @@
+<section class="alert-center" aria-live="assertive" aria-atomic="true">
+  <article
+    class="alert"
+    *ngFor="let alert of alerts$ | async; trackBy: trackById"
+    [class.alert--success]="alert.type === 'success'"
+    [class.alert--error]="alert.type === 'error'"
+    [class.alert--info]="alert.type === 'info'">
+    <div class="alert__content">
+      <span class="alert__icon" [attr.data-variant]="alert.type" aria-hidden="true"></span>
+      <p class="alert__message">{{ alert.message }}</p>
+    </div>
+    <button
+      type="button"
+      class="alert__close"
+      aria-label="Cerrar alerta"
+      (click)="dismiss(alert.id)">
+      ×
+    </button>
+  </article>
+</section>
+
+

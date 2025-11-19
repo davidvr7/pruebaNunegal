@@ -1,0 +1,24 @@
+<article
+  class="product-card"
+  (click)="onSelect()"
+  tabindex="0"
+  role="button"
+  [attr.aria-label]="product ? 'Ver detalle de ' + product.model : 'Tarjeta de producto'">
+  <div class="image-wrapper">
+    <img [src]="product?.imgUrl" [alt]="product?.model" loading="lazy" />
+  </div>
+  <div class="card-content">
+    <p class="brand-chip">{{ product?.brand }}</p>
+    <h3>{{ product?.model }}</h3>
+    <p class="price" *ngIf="product?.price; else priceNotAvailable">
+      {{ product?.price | currency : 'EUR' : 'symbol-narrow' : '1.0-0' }}
+    </p>
+    <ng-template #priceNotAvailable>
+      <p class="price muted">Precio no disponible</p>
+    </ng-template>
+    <div class="card-footer">
+      <span class="cta-label">Ver detalles</span>
+      <span class="cta-icon" aria-hidden="true">&rarr;</span>
+    </div>
+  </div>
+</article>

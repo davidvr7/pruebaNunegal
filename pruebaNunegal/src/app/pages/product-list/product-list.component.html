@@ -1,0 +1,75 @@
+<section class="product-list-page">
+  <div class="list-view">
+    <aside class="search-panel">
+      <h2>Encuentra tu próximo móvil</h2>
+      <p>Filtra por marca o modelo y descubre el dispositivo perfecto.</p>
+      <app-search (searchChange)="onSearchChange($event)"></app-search>
+
+      <div class="stats-grid" *ngIf="stats.total">
+        <div class="stat-card">
+          <span class="stat-label">Modelos cargados</span>
+          <strong class="stat-value">{{ stats.total }}</strong>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Marcas</span>
+          <strong class="stat-value">{{ stats.brands }}</strong>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Resultados activos</span>
+          <strong class="stat-value">{{ filteredProducts.length }}</strong>
+        </div>
+      </div>
+    </aside>
+
+    <div class="grid-panel">
+      <header class="grid-header">
+        <div>
+          <h2 class="section-title">Catálogo completo</h2>
+          <p class="section-subtitle">
+            Mostrando {{ visibleProducts.length }} de {{ filteredProducts.length }} modelos actualmente cargados.
+          </p>
+        </div>
+        <div class="grid-controls" *ngIf="stats.total">
+          <label class="sort-field">
+            <span>Ordenar por</span>
+            <select #sortSelect [value]="selectedSort" (change)="onSortSelectionChange(sortSelect.value)">
+              <option *ngFor="let option of sortOptions" [value]="option.value">
+                {{ option.label }}
+              </option>
+            </select>
+          </label>
+          <button
+            type="button"
+            class="reset-btn"
+            *ngIf="hasActiveFilters"
+            (click)="resetFilters()">
+            Limpiar filtros
+          </button>
+        </div>
+      </header>
+
+      <div class="skeleton-grid" *ngIf="loading">
+        <div class="skeleton-card" *ngFor="let _ of skeletonPlaceholders"></div>
+      </div>
+
+      <div class="state-card error" *ngIf="!loading && errorMessage">
+        <div>
+          {{ errorMessage }}
+        </div>
+        <button type="button" class="retry-btn" (click)="retry()">Reintentar</button>
+      </div>
+
+      <div class="state-card" *ngIf="!loading && !errorMessage && !filteredProducts.length">
+        Ningún producto coincide con tu búsqueda.
+      </div>
+
+      <div class="product-grid" *ngIf="!loading && !errorMessage && filteredProducts.length">
+        <app-product-card
+          *ngFor="let product of visibleProducts; trackBy: trackByProductId"
+          [product]="product"
+          (selectProduct)="onSelectProduct($event)">
+        </app-product-card>
+      </div>
+    </div>
+  </div>
+</section>

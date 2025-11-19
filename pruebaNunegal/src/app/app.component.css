@@ -1,0 +1,16 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #eef2ff 0%, #fdf2f8 45%, #ffffff 100%);
+}
+
+.app-wrapper {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.main-content {
+  min-height: calc(100vh - 200px);
+}
+

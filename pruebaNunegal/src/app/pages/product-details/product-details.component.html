@@ -1,0 +1,91 @@
+<section class="product-details-page">
+  <button class="back-link" type="button" (click)="onBack()">&larr; Volver al listado</button>
+
+  <div class="details-container" *ngIf="loading">
+    <div class="state-card">Cargando detalles...</div>
+  </div>
+
+  <div class="details-container" *ngIf="!loading && errorMessage">
+    <div class="state-card error">
+      <span>{{ errorMessage }}</span>
+      <button class="retry-btn" type="button" (click)="retry()">Reintentar</button>
+    </div>
+  </div>
+
+  <div class="details-container" *ngIf="!loading && detail">
+    <div class="image-panel">
+      <img [src]="detail.imgUrl" [alt]="detail.model" />
+    </div>
+
+    <div class="info-panel">
+      <header>
+        <p class="eyebrow">{{ detail.brand }}</p>
+        <h1>{{ detail.model }}</h1>
+        <p class="sku">Ref: {{ detail.id }}</p>
+        <p class="price" *ngIf="detail.price; else noPrice">
+          {{ detail.price | currency : 'EUR' : 'symbol-narrow' : '1.0-0' }}
+        </p>
+        <ng-template #noPrice>
+          <p class="price muted">Precio no disponible</p>
+        </ng-template>
+      </header>
+
+      <ul class="highlights">
+        <li>
+          <span>CPU</span>
+          <strong>{{ detail.cpu || 'N/A' }}</strong>
+        </li>
+        <li>
+          <span>RAM</span>
+          <strong>{{ detail.ram || 'N/A' }}</strong>
+        </li>
+        <li>
+          <span>S.O.</span>
+          <strong>{{ detail.os || 'N/A' }}</strong>
+        </li>
+      </ul>
+
+      <section class="specs">
+        <h3>Ficha técnica</h3>
+        <dl>
+          <div *ngFor="let field of specificationFields">
+            <dt>{{ field.label }}</dt>
+            <dd>{{ specValue(field) }}</dd>
+          </div>
+        </dl>
+      </section>
+
+      <form class="actions" [formGroup]="selectionForm" (ngSubmit)="onSubmit()">
+        <h3>Personaliza tu compra</h3>
+        <label>
+          Color
+          <select formControlName="color">
+            <option value="" disabled>Selecciona un color</option>
+            <option *ngFor="let color of colorOptions" [value]="color.code">{{ color.name }}</option>
+          </select>
+          <span class="field-error" *ngIf="colorControl.invalid && colorControl.touched">
+            Selecciona un color disponible.
+          </span>
+        </label>
+
+        <label>
+          Almacenamiento
+          <select formControlName="storage">
+            <option value="" disabled>Selecciona una capacidad</option>
+            <option *ngFor="let storage of storageOptions" [value]="storage.code">{{ storage.name }}</option>
+          </select>
+          <span class="field-error" *ngIf="storageControl.invalid && storageControl.touched">
+            Selecciona una capacidad disponible.
+          </span>
+        </label>
+
+        <button type="submit" [disabled]="disableSubmit">
+          {{ actionState === 'loading' ? 'Añadiendo...' : 'Añadir al carrito' }}
+        </button>
+        <p class="action-message" [class.error]="actionState === 'error'" *ngIf="actionMessage">
+          {{ actionMessage }}
+        </p>
+      </form>
+    </div>
+  </div>
+</section>

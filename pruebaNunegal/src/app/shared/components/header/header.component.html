@@ -1,0 +1,22 @@
+<header class="app-header">
+  <div class="header-left">
+    <a routerLink="/" class="brand" title="Volver al inicio">
+      <div class="brand-icon">NM</div>
+      <div class="brand-text">
+        <span class="brand-title">Nunegal Mobile</span>
+        <span class="brand-subtitle">Tu tienda de dispositivos</span>
+      </div>
+    </a>
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <ng-container *ngFor="let crumb of breadcrumbs; let last = last">
+        <a *ngIf="!last" [routerLink]="crumb.url">{{ crumb.label }}</a>
+        <span *ngIf="last">{{ crumb.label }}</span>
+        <span class="divider" *ngIf="!last">/</span>
+      </ng-container>
+    </nav>
+  </div>
+  <div class="header-right">
+    <span class="cart-label">Carrito</span>
+    <span class="cart-count" data-testid="cart-count">{{ (cartCount$ | async) ?? 0 }}</span>
+  </div>
+</header>
